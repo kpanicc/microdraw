@@ -1,4 +1,4 @@
-const https = require("https")
+const http = require("http")
 const constants = require("../../constants.js")
 
 module.exports = function (req, res, next) {
