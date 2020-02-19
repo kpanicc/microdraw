@@ -24,8 +24,13 @@ var Microdraw = (function () {
     request.send(null);
 
     if (request.status == 200)
-    {
+    {       
         console.log(request.responseText);
+        imageMetadata = JSON.parse(request.responseText);
+    }
+    else
+    {
+        console.log("ERROR requesting image metadata");
     }
 
     var me = {
