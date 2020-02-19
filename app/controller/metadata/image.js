@@ -2,7 +2,7 @@ const https = require("https")
 const constants = require("../../constants.js")
 
 module.exports = function (req, res, next) {
-    https.get("http://" + constants.VISILABServer.IP + ":" + constants.VISILABServer.port + 
+    http.get("http://" + constants.VISILABServer.IP + ":" + constants.VISILABServer.port + 
             "/getImageMetadata", (resp) => {
                 let data = "";
                 resp.on('data', (chunk) => {

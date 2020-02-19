@@ -1,4 +1,4 @@
 module.exports.VISILABServer = Object.freeze({
-    IP                       :  "localhost",
-    port                     :  "3000"
+    IP                       :  "161.67.219.11",
+    port                     :  "5010"
 });
