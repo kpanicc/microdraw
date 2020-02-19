@@ -18,6 +18,16 @@
 // import ToolToPolygon from '/js/tools/toPolygon.js';
 
 var Microdraw = (function () {
+
+    var request = new XMLHttpRequest();
+    request.open("GET", "/getImageMetadata", false);
+    request.send(null);
+
+    if (request.status == 200)
+    {
+        console.log(request.responseText);
+    }
+
     var me = {
         debug: 1,
         ImageInfo: {},               // regions, and projectID (for the paper.js canvas) for each sections, can be accessed by the section name. (e.g. me.ImageInfo[me.imageOrder[viewer.current_page()]])

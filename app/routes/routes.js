@@ -2,6 +2,7 @@
 const mustacheExpress = require('mustache-express');
 const path = require('path');
 const {authTokenMiddleware, getTokenEndPoint} = require('../auth/token');
+const getImageMetadata = require('../metadata/image');
 
 module.exports = (app) => {
     console.log(`configuring routes`);
@@ -44,6 +45,8 @@ module.exports = (app) => {
     app.use('/search', require('../controller/search/'));
 
     app.get('/token', getTokenEndPoint)
+
+    app.get('/getImageMetadata', getImageMetadata);
 
     app.use('/api', authTokenMiddleware, require('../controller/api/'));
 
