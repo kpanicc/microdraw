@@ -46,7 +46,9 @@ module.exports = (app) => {
 
     app.get('/token', getTokenEndPoint)
 
-    app.get('/getImageMetadata', getImageMetadata);
+    app.get('/getImageMetadata', function (req, res, next) {
+      res.send({some: "json"});
+  });
 
     app.use('/api', authTokenMiddleware, require('../controller/api/'));
 
