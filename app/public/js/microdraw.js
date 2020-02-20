@@ -2140,16 +2140,6 @@ var Microdraw = (function () {
                 me.config.defaultFillAlpha = 0.5;
             }
 
-            // init slider that can be used to change between slides
-            if(typeof me.params.slice === 'undefined') {
-                me.initSlider(0, obj.tileSources.length, 1, Math.round(obj.tileSources.length / 2));
-                me.currentImage = me.imageOrder[Math.floor(obj.tileSources.length / 2)];
-                me.addSliceToURL(me.currentImage);
-            } else {
-                me.initSlider(0, obj.tileSources.length, 1, me.params.slice);
-                me.currentImage = me.imageOrder[[parseInt(me.params.slice, 10)]];
-            }
-
             me.viewer = new OpenSeadragon({
                 id: "openseadragon1",
                 prefixUrl: "/lib/openseadragon/images/",
