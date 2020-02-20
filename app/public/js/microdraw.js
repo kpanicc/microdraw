@@ -2129,6 +2129,14 @@ var Microdraw = (function () {
          * @returns {void}
          */
         initMicrodraw2: function initMicrodraw2() {
+            // leftover from the code originally used in microdraw, name should be 0 (the index of the old tileSource)
+            var name = String(0);
+            me.imageOrder.push(name);
+            me.ImageInfo[name] = {
+                source: obj.tileSources[i],
+                Regions: []
+            };
+
             // set default values for new regions (general configuration)
             if (typeof me.config.defaultStrokeColor === "undefined") {
                 me.config.defaultStrokeColor = 'black';
@@ -2206,25 +2214,7 @@ var Microdraw = (function () {
                   }
             });
 
-            // open the currentImage
-            //me.viewer.open(me.ImageInfo[me.currentImage].source);
-
-            // add the scalebar
-            me.viewer.scalebar({
-                type: OpenSeadragon.ScalebarType.MICROSCOPE,
-                minWidth:'150px',
-                pixelsPerMeter:obj.pixelsPerMeter,
-                color:'black',
-                fontColor:'black',
-                backgroundColor:"rgba(255, 255, 255, 0.5)",
-                barThickness:4,
-                location: OpenSeadragon.ScalebarLocation.TOP_RIGHT,
-                xOffset:5,
-                yOffset:5
-            });
-
-            /* fixes https://github.com/r03ert0/microdraw/issues/142  */
-            me.viewer.scalebarInstance.divElt.style.pointerEvents = `none`;
+            me.imageNumber = 0;
 
             // add screenshot
             me.viewer.screenshot({
