@@ -2128,32 +2128,7 @@ var Microdraw = (function () {
          * @param {Object} obj DZI json configuration object
          * @returns {void}
          */
-        initMicrodraw2: function initMicrodraw2(obj) {
-            if( me.debug ) {
-                console.log("json file:", obj);
-            }
-
-            // for loading the bigbrain
-            if( obj.tileCodeY ) {
-                obj.tileSources = obj.tileCodeY;
-            }
-
-            // set up the ImageInfo array and me.imageOrder array
-            var i;
-            for( i = 0; i < obj.tileSources.length; i += 1 ) {
-                // name is either the index of the tileSource or a named specified in the json file
-                var name = ((obj.names && obj.names[i]) ? String(obj.names[i]) : String(i));
-                me.imageOrder.push(name);
-                me.ImageInfo[name] = {
-                    source: obj.tileSources[i],
-                    Regions: []
-                };
-                // if getTileUrl is specified, we might need to eval it to get the function
-                if( obj.tileSources[i].getTileUrl && typeof obj.tileSources[i].getTileUrl === 'string' ) {
-                    eval(`me.ImageInfo[name].source.getTileUrl = ${obj.tileSources[i].getTileUrl}`)
-                }
-            }
-
+        initMicrodraw2: function initMicrodraw2() {
             // set default values for new regions (general configuration)
             if (typeof me.config.defaultStrokeColor === "undefined") {
                 me.config.defaultStrokeColor = 'black';
@@ -2163,18 +2138,6 @@ var Microdraw = (function () {
             }
             if (typeof me.config.defaultFillAlpha === "undefined") {
                 me.config.defaultFillAlpha = 0.5;
-            }
-            // set default values for new regions (per-brain configuration)
-            if (obj.configuration) {
-                if (typeof obj.configuration.defaultStrokeColor !== "undefined") {
-                    me.config.defaultStrokeColor = obj.configuration.defaultStrokeColor;
-                }
-                if (typeof obj.configuration.defaultStrokeWidth !== "undefined") {
-                    me.config.defaultStrokeWidth = obj.configuration.defaultStrokeWidth;
-                }
-                if (typeof obj.configuration.defaultFillAlpha !== "undefined") {
-                    me.config.defaultFillAlpha = obj.configuration.defaultFillAlpha;
-                }
             }
 
             // init slider that can be used to change between slides
@@ -2187,12 +2150,6 @@ var Microdraw = (function () {
                 me.currentImage = me.imageOrder[[parseInt(me.params.slice, 10)]];
             }
 
-            me.params.tileSources = obj.tileSources;
-            if (typeof obj.fileID !== 'undefined') {
-                me.fileID = obj.fileID;
-            } else {
-                me.fileID = me.source + '_' + me.section;
-            }
             me.viewer = new OpenSeadragon({
                 id: "openseadragon1",
                 prefixUrl: "/lib/openseadragon/images/",
@@ -2206,11 +2163,61 @@ var Microdraw = (function () {
                 zoomOutButton:"zoomOut",
                 homeButton:"home",
                 maxZoomPixelRatio:10,
-                preserveViewport: true
+                preserveViewport: true,
+                tileSources:   {
+                    height: imageMetadata.viewerdata.image_size_y, //image_size_y, //512*256,
+                    width:  imageMetadata.viewerdata.image_size_x, //image_size_x, //512*256,
+                    //tileSize: 256,
+                    tileWidth: imageMetadata.viewerdata.tile_x,
+                    tileHeight: imageMetadata.viewerdata.tile_y,
+                    maxLevel: 7,
+              
+                    getTileUrl: function( level, x, y ){ // IMPORTANT, x are the actual columns, y are the rows!
+                      /*console.log('level: '+level);
+                      console.log('y (row): '+y);
+                      console.log('x (col): '+x);*/
+                      
+                      if(level==0){ //take care, osd first call level 0, but levels start at level 1
+                        level=1;
+                      }/*
+                      var x1 = x 
+                      var y1 = y */
+              
+                      //console.log("Level in Viewer: "+level);
+                      //level = level + 1;
+              
+                      var elemento = imageMetadata[level - 1];
+              
+                      if( elemento == undefined ) {
+                          return "http://127.0.0.1";
+                      }
+                      else{
+                          if( elemento.rows[y] == undefined ) {
+                              return "http://127.0.0.1";
+                          }
+                          else{
+                              if( elemento.rows[y].cols[x] == undefined ) {
+                                  return "http://127.0.0.1";
+                              }
+                              else{
+              
+                                  var framenumber = elemento.rows[y].cols[x].framenumber;
+                                  var instanceuid = elemento.instanceuid;
+              
+                                  var url = imageMetadata.ipviewer+"/WRSDicomTile?studyuid="+imageMetadata.viewerdata.currentStudy+"&seriesuid="+imageMetadata.viewerdata.currentSeries+"&instanceuid="+instanceuid+"&framenumber="+framenumber;
+              
+                                  // console.log("framenumber: "+framenumber+' - level: '+level+' - instance : '+instanceuid);
+                                  return url;
+              
+                              }
+                          }
+                      }
+                    }
+                  }
             });
 
             // open the currentImage
-            me.viewer.open(me.ImageInfo[me.currentImage].source);
+            //me.viewer.open(me.ImageInfo[me.currentImage].source);
 
             // add the scalebar
             me.viewer.scalebar({
@@ -2294,8 +2301,8 @@ var Microdraw = (function () {
                         me.initMicrodraw();
                     }
                 })
-                .then( () => me.loadSourceJson())
-                .then( (json) => me.initMicrodraw2(json));
+                //.then( () => me.loadSourceJson())
+                .then( () => me.initMicrodraw2());
         }
     };
 
