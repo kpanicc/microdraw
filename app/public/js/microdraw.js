@@ -2176,7 +2176,7 @@ var Microdraw = (function () {
                       //console.log("Level in Viewer: "+level);
                       //level = level + 1;
               
-                      var elemento = imageMetadata[level - 1];
+                      var elemento = imageMetadata.levels[level - 1];
               
                       if( elemento == undefined ) {
                           return "http://127.0.0.1";
