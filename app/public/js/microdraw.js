@@ -2236,18 +2236,18 @@ var Microdraw = (function () {
             });
 
             me.viewer.addHandler('zoom', function(eventSource, zoom, refPoint, immediately, userData) {
-                zoomvport = viewer.viewport.getZoom();
-                zoomimage = viewer.viewport.viewportToImageZoom(zoomvport);
+                zoomvport = me.viewer.viewport.getZoom();
+                zoomimage = me.viewer.viewport.viewportToImageZoom(zoomvport);
                 console.log("Zoom image: " + zoomimage);
                 document.getElementById("zoomvalue").value = zoomimage;
-                updateZoomLabel(zoomimage);
+                me.updateZoomLabel(zoomimage);
             });
 
             var slider = document.getElementById("zoomvalue");
             slider.oninput = function() {
                 viewportZoomValue = viewer.viewport.imageToViewportZoom(slider.value);
                 me.viewer.viewport.zoomTo(viewportZoomValue);
-                updateZoomLabel(slider.value);
+                me.updateZoomLabel(slider.value);
             }
 
             me.viewer.addHandler('animation', function () {
@@ -2270,7 +2270,16 @@ var Microdraw = (function () {
         },
 
         updateZoomLabel: function updateZoomLabel(zoomLevel) {
-            document.getElementById("zoomSliderLabel").innerHTML = zoomLevel * imageMetadata.viewerdata.objectivepower + "x";
+            zoomSliderLabel = document.getElementById("zoomSliderLabel");
+            zoomSliderLabel.innerHTML = (zoomLevel * imageMetadata.viewerdata.objectivepower).toFixed(2) + "x";
+            if (zoomLevel > 1)
+            {
+                zoomSliderLabel.style.color = "red";
+            }
+            else
+            {
+                zoomSliderLabel.style.color = "black";
+            }
         },
 
         /**
