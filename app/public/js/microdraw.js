@@ -19,18 +19,22 @@
 
 var Microdraw = (function () {
 
-    var request = new XMLHttpRequest();
-    request.open("GET", "/getImageMetadata", false);
-    request.send(null);
+    try {
+        var request = new XMLHttpRequest();
+        request.open("GET", "/getImageMetadata", false);
+        request.send(null);
 
-    if (request.status == 200)
-    {       
-        console.log(request.responseText);
-        imageMetadata = JSON.parse(request.responseText);
-    }
-    else
-    {
-        console.log("ERROR requesting image metadata");
+        if (request.status == 200)
+        {       
+            console.log(request.responseText);
+            imageMetadata = JSON.parse(request.responseText);
+        }
+        else
+        {
+            console.log("ERROR requesting image metadata");
+        }
+    } catch (error) {
+        console.log("ERROR while requesting image metadata:  " + error);
     }
 
     var me = {
@@ -2230,6 +2234,22 @@ var Microdraw = (function () {
                 me.initAnnotationOverlay();
                 me.updateSectionName();
             });
+
+            me.viewer.addHandler('zoom', function(eventSource, zoom, refPoint, immediately, userData) {
+                zoomvport = viewer.viewport.getZoom();
+                zoomimage = viewer.viewport.viewportToImageZoom(zoomvport);
+                console.log("Zoom image: " + zoomimage);
+                document.getElementById("zoomvalue").value = zoomimage;
+                updateZoomLabel(zoomimage);
+            });
+
+            var slider = document.getElementById("zoomvalue");
+            slider.oninput = function() {
+                viewportZoomValue = viewer.viewport.imageToViewportZoom(slider.value);
+                viewer.viewport.zoomTo(viewportZoomValue);
+                updateZoomLabel(slider.value);
+            }
+
             me.viewer.addHandler('animation', function () {
                 me.transform();
             });
@@ -2249,6 +2269,10 @@ var Microdraw = (function () {
             }
         },
 
+        updateZoomLabel: function updateZoomLabel(zoomLevel) {
+            document.getElementById("zoomSliderLabel").innerHTML = zoomLevel * imageMetadata.viewerdata.objectivepower + "x";
+        },
+
         /**
          * @function toggleMenu
          * @return {void}
@@ -2264,6 +2288,7 @@ var Microdraw = (function () {
         },
 
         init: function init() {
+            me.loadZoomSlider();
             me.loadConfiguration()
                 .then(function () {
                     if( me.config.useDatabase ) {
@@ -2282,6 +2307,10 @@ var Microdraw = (function () {
                 })
                 //.then( () => me.loadSourceJson())
                 .then( () => me.initMicrodraw2());
+        },
+
+        loadZoomSlider: function loadZoomSlider() {
+            
         }
     };
 
