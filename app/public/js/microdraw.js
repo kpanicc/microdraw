@@ -2272,10 +2272,7 @@ var Microdraw = (function () {
                                 me.params = me.deparam();
                                 me.section = me.currentImage;
                                 me.source = me.params.source;
-                                if(typeof me.params.project !== 'undefined') {
-                                    me.project = me.params.project;
-                                }
-                                // updateUser();
+                                me.project = imageMetadata.viewerdata.currentStudy;
                             })
                             .then(me.initMicrodraw);
                     } else {
