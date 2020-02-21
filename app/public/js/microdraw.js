@@ -2336,9 +2336,9 @@ var Microdraw = (function () {
             mediumButton = document.getElementById("mediumZoom");
             highButton = document.getElementById("highZoom");
 
-            lowButton.innerHTML = lowZoomLevel;
-            mediumButton.innerHTML = mediumZoomLevel;
-            highButton.innerHTML = highZoomLevel;
+            lowButton.innerHTML = lowZoomLevel + "x";
+            mediumButton.innerHTML = mediumZoomLevel + "x";
+            highButton.innerHTML = highZoomLevel + "x";
             lowButton.style.color = "black";
             mediumButton.style.color = "black";
             highButton.style.color = "black";
