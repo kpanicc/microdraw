@@ -17,6 +17,10 @@
 // import ToolToBezier from '/js/tools/toBezier.js';
 // import ToolToPolygon from '/js/tools/toPolygon.js';
 
+lowZoom = 0.25;
+mediumZoom = 0.5;
+highZoom = 1;
+
 var Microdraw = (function () {
 
     try {
@@ -2245,8 +2249,7 @@ var Microdraw = (function () {
 
             var slider = document.getElementById("zoomvalue");
             slider.oninput = function() {
-                viewportZoomValue = me.viewer.viewport.imageToViewportZoom(slider.value);
-                me.viewer.viewport.zoomTo(viewportZoomValue);
+                me.zoomToImageZoomLevel(slider.value);
                 me.updateZoomLabel(slider.value);
             }
 
@@ -2267,6 +2270,11 @@ var Microdraw = (function () {
             if( me.debug ) {
                 console.log("< initMicrodraw2 resolve: success");
             }
+        },
+
+        zoomToImageZoomLevel: function zoomToImageZoomLevel(imageZoomLevel) {
+            viewportZoomValue = me.viewer.viewport.imageToViewportZoom(imageZoomLevel);
+            me.viewer.viewport.zoomTo(viewportZoomValue);
         },
 
         updateZoomLabel: function updateZoomLabel(zoomLevel) {
@@ -2297,7 +2305,7 @@ var Microdraw = (function () {
         },
 
         init: function init() {
-            me.loadZoomSlider();
+            me.loadZoomButtons();
             me.loadConfiguration()
                 .then(function () {
                     if( me.config.useDatabase ) {
@@ -2318,8 +2326,41 @@ var Microdraw = (function () {
                 .then( () => me.initMicrodraw2());
         },
 
-        loadZoomSlider: function loadZoomSlider() {
-            
+        loadZoomButtons: function loadZoomButtons() {
+            objectivepower = imageMetadata.viewerdata.objectivepower;
+            lowZoomLevel = (objectivepower * lowZoom).toFixed(2);
+            mediumZoomLevel = (objectivepower * mediumZoom).toFixed(2);
+            highZoomLevel = (objectivepower * highZoom).toFixed(2);
+
+            lowButton = document.getElementById("lowZoom");
+            mediumButton = document.getElementById("mediumZoom");
+            highButton = document.getElementById("highZoom");
+
+            lowButton.innerHTML = lowZoomLevel;
+            mediumButton.innerHTML = mediumZoomLevel;
+            highButton.innerHTML = highZoomLevel;
+
+            lowButton.addEventListener("click", me.lowButtonClick)
+            mediumButton.addEventListener("click", me.mediumButtonClick)
+            highButton.addEventListener("click", me.highButtonClick)
+        },
+
+        lowButtonClick: function lowButtonClick() {
+            objectivepower = imageMetadata.viewerdata.objectivepower;
+            viewportZoom = 0.25;
+            me.zoomToImageZoomLevel(viewportZoom);
+        },
+
+        mediumButtonClick: function mediumButtonClick() {
+            objectivepower = imageMetadata.viewerdata.objectivepower;
+            viewportZoom = 0.5;
+            me.zoomToImageZoomLevel(viewportZoom);
+        },
+
+        highButtonClick: function highButtonClick() {
+            objectivepower = imageMetadata.viewerdata.objectivepower;
+            viewportZoom = 1; // this should be the maximum zoom available
+            me.zoomToImageZoomLevel(viewportZoom);
         }
     };
 
