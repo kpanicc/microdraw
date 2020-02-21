@@ -1655,10 +1655,11 @@ var Microdraw = (function () {
          * @returns {void}
          */
         updateSectionName: function updateSectionName() {
-            $("#sectionName").val(me.currentImage);
+            // Currently, we dont have any metadata about the name or the patient of the image, just leave the default title
+            /*$("#sectionName").val(me.currentImage);
             var slashIndex = me.params.source.lastIndexOf("/") + 1;
             var filename = me.params.source.substr(slashIndex);
-            $("title").text("MicroDraw|" + filename + "|" + me.currentImage);
+            $("title").text("MicroDraw|" + filename + "|" + me.currentImage);*/
         },
 
         /**
@@ -2133,7 +2134,7 @@ var Microdraw = (function () {
             var name = String(0);
             me.imageOrder.push(name);
             me.ImageInfo[name] = {
-                source: obj.tileSources[i],
+                source: "getTileUrl",
                 Regions: []
             };
 
@@ -2215,6 +2216,7 @@ var Microdraw = (function () {
             });
 
             me.imageNumber = 0;
+            me.currentImage = 0;
 
             // add screenshot
             me.viewer.screenshot({
