@@ -2245,7 +2245,7 @@ var Microdraw = (function () {
 
             var slider = document.getElementById("zoomvalue");
             slider.oninput = function() {
-                viewportZoomValue = viewer.viewport.imageToViewportZoom(slider.value);
+                viewportZoomValue = me.viewer.viewport.imageToViewportZoom(slider.value);
                 me.viewer.viewport.zoomTo(viewportZoomValue);
                 me.updateZoomLabel(slider.value);
             }
