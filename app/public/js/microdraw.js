@@ -415,7 +415,7 @@ var Microdraw = (function () {
                         if( reg ) {
                             me.changeRegionName(reg, newName);
                             text = $(".region-text")[0].value;
-                            reg.text = value;
+                            reg.text = text;
                             $("div#regionPicker").appendTo($("body"))
                             .hide();
                         }
@@ -2137,7 +2137,7 @@ var Microdraw = (function () {
             });
 
             me.appendRegionTagsFromOntology(Ontology);
-            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"15\" rows=\"6\"></textarea>");
+            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"14\" rows=\"6\"></textarea>");
 
         },
 
