@@ -414,8 +414,11 @@ var Microdraw = (function () {
                         reg = me.findRegionByUID(uid);
                         if( reg ) {
                             me.changeRegionName(reg, newName);
+
                             text = $(".region-text")[0].value;
                             reg.text = text;
+                            $(".region-text")[0].value = "";
+                            
                             $("div#regionPicker").appendTo($("body"))
                             .hide();
                         }
