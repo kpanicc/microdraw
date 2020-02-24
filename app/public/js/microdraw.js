@@ -2130,7 +2130,7 @@ var Microdraw = (function () {
             });
 
             me.appendRegionTagsFromOntology(Ontology);
-            $("#regionPicker").append("<textarea name=\"Text1\" cols=\"10\" rows=\"5\"></textarea>");
+            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"10\" rows=\"7\"></textarea>");
 
         },
 

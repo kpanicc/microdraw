@@ -181,6 +181,10 @@
 {
     color:black;
 }
+.region-text
+{
+    color:black;
+}
 .region-tag.deselected {
     background-color:transparent;
 }
