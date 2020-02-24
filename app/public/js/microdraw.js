@@ -2130,6 +2130,8 @@ var Microdraw = (function () {
             });
 
             me.appendRegionTagsFromOntology(Ontology);
+            $("#regionPicker").append("<textarea name=\"Text1\" cols=\"10\" rows=\"5\"></textarea>");
+
         },
 
         /**
@@ -2272,11 +2274,21 @@ var Microdraw = (function () {
             }
         },
 
+        /**
+         * @function zoomToImageZoomLevel
+         * @desc Zooms viewport to an image zoom level
+         * @returns {void}
+         */
         zoomToImageZoomLevel: function zoomToImageZoomLevel(imageZoomLevel) {
             viewportZoomValue = me.viewer.viewport.imageToViewportZoom(imageZoomLevel);
             me.viewer.viewport.zoomTo(viewportZoomValue);
         },
 
+        /**
+         * @function updateZoomLabel
+         * @desc Updates the label that shows the current image zoom level
+         * @returns {void}
+         */
         updateZoomLabel: function updateZoomLabel(zoomLevel) {
             zoomSliderLabel = document.getElementById("zoomSliderLabel");
             zoomSliderLabel.innerHTML = (zoomLevel * imageMetadata.viewerdata.objectivepower).toFixed(2) + "x";
@@ -2326,6 +2338,11 @@ var Microdraw = (function () {
                 .then( () => me.initMicrodraw2());
         },
 
+        /**
+         * @function loadZoomButtons
+         * @desc Initializes all three zoom buttons
+         * @returns {void}
+         */
         loadZoomButtons: function loadZoomButtons() {
             objectivepower = imageMetadata.viewerdata.objectivepower;
             lowZoomLevel = (objectivepower * lowZoom).toFixed(2);
