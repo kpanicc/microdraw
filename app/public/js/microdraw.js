@@ -414,6 +414,8 @@ var Microdraw = (function () {
                         reg = me.findRegionByUID(uid);
                         if( reg ) {
                             me.changeRegionName(reg, newName);
+                            text = $(".region-text")[0].value;
+                            reg.text = value;
                             $("div#regionPicker").appendTo($("body"))
                             .hide();
                         }
@@ -463,6 +465,11 @@ var Microdraw = (function () {
                 if( event.clientX > 50 && me.config.drawingEnabled ) {
                     if( me.config.regionOntology === true ) {
                         me.regionPicker(this);
+                        // Update text area value
+                        uid = $(".region-tag.selected").attr('id');
+                        reg = me.findRegionByUID(uid);
+                        if ("text" in reg)
+                            $(".region-text")[0].value = reg.text;
                     } else {
                         name = prompt("Region name", me.findRegionByUID(this.id).name);
                         if( name !== null ) {
@@ -2130,7 +2137,7 @@ var Microdraw = (function () {
             });
 
             me.appendRegionTagsFromOntology(Ontology);
-            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"10\" rows=\"7\"></textarea>");
+            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"15\" rows=\"6\"></textarea>");
 
         },
 
