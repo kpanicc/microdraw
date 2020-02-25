@@ -541,6 +541,12 @@ var Microdraw = (function () {
                 reg.name = "Untitled " + reg.uid;
             }
 
+            if (arg.text) {
+                reg.text = arg.text;
+            } else {
+                reg.text = "";
+            }
+
             var color = me.regionHashColor(reg.name);
 
             if( arg.path ) {
@@ -1474,6 +1480,7 @@ var Microdraw = (function () {
                             for( let i = 0; i < data.length; i += 1 ) {
                                 const reg = {};
                                 reg.name = data[i].annotation.name;
+                                reg.text = data[i].annotation.text;
                                 const json = data[i].annotation.path;
 
                                 const [type] = json;
@@ -1498,7 +1505,7 @@ var Microdraw = (function () {
                                     reg.path.insert = insert;
                                 }
 
-                                me.newRegion({name:reg.name, path:reg.path});
+                                me.newRegion({name:reg.name, text:reg.text, path:reg.path});
                             }
                             paper.view.draw();
 
