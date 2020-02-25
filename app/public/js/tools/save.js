@@ -11,6 +11,7 @@ var ToolSave = { save : (function() {
             var el = {};
             el.path = JSON.parse(section.Regions[i].path.exportJSON());
             el.name = section.Regions[i].name;
+            el.text = section.Regions[i].text;
             value.Regions.push(el);
         }
 
@@ -97,6 +98,7 @@ var ToolSave = { save : (function() {
                 project: Microdraw.project,
                 Hash: h,
                 annotation: JSON.stringify(value)
+
             }));
         });
 

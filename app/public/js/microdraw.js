@@ -414,6 +414,11 @@ var Microdraw = (function () {
                         reg = me.findRegionByUID(uid);
                         if( reg ) {
                             me.changeRegionName(reg, newName);
+
+                            text = $(".region-text")[0].value;
+                            reg.text = text;
+                            $(".region-text")[0].value = "";
+                            
                             $("div#regionPicker").appendTo($("body"))
                             .hide();
                         }
@@ -463,6 +468,11 @@ var Microdraw = (function () {
                 if( event.clientX > 50 && me.config.drawingEnabled ) {
                     if( me.config.regionOntology === true ) {
                         me.regionPicker(this);
+                        // Update text area value
+                        uid = $(".region-tag.selected").attr('id');
+                        reg = me.findRegionByUID(uid);
+                        if ("text" in reg)
+                            $(".region-text")[0].value = reg.text;
                     } else {
                         name = prompt("Region name", me.findRegionByUID(this.id).name);
                         if( name !== null ) {
@@ -529,6 +539,12 @@ var Microdraw = (function () {
                 reg.name = arg.name;
             } else {
                 reg.name = "Untitled " + reg.uid;
+            }
+
+            if (arg.text) {
+                reg.text = arg.text;
+            } else {
+                reg.text = "";
             }
 
             var color = me.regionHashColor(reg.name);
@@ -1464,6 +1480,7 @@ var Microdraw = (function () {
                             for( let i = 0; i < data.length; i += 1 ) {
                                 const reg = {};
                                 reg.name = data[i].annotation.name;
+                                reg.text = data[i].annotation.text;
                                 const json = data[i].annotation.path;
 
                                 const [type] = json;
@@ -1488,7 +1505,7 @@ var Microdraw = (function () {
                                     reg.path.insert = insert;
                                 }
 
-                                me.newRegion({name:reg.name, path:reg.path});
+                                me.newRegion({name:reg.name, text:reg.text, path:reg.path});
                             }
                             paper.view.draw();
 
@@ -2130,6 +2147,8 @@ var Microdraw = (function () {
             });
 
             me.appendRegionTagsFromOntology(Ontology);
+            $("#regionPicker").append("<textarea class=\"region-text\" name=\"Region Name\" cols=\"14\" rows=\"6\"></textarea>");
+
         },
 
         /**
@@ -2272,11 +2291,21 @@ var Microdraw = (function () {
             }
         },
 
+        /**
+         * @function zoomToImageZoomLevel
+         * @desc Zooms viewport to an image zoom level
+         * @returns {void}
+         */
         zoomToImageZoomLevel: function zoomToImageZoomLevel(imageZoomLevel) {
             viewportZoomValue = me.viewer.viewport.imageToViewportZoom(imageZoomLevel);
             me.viewer.viewport.zoomTo(viewportZoomValue);
         },
 
+        /**
+         * @function updateZoomLabel
+         * @desc Updates the label that shows the current image zoom level
+         * @returns {void}
+         */
         updateZoomLabel: function updateZoomLabel(zoomLevel) {
             zoomSliderLabel = document.getElementById("zoomSliderLabel");
             zoomSliderLabel.innerHTML = (zoomLevel * imageMetadata.viewerdata.objectivepower).toFixed(2) + "x";
@@ -2326,6 +2355,11 @@ var Microdraw = (function () {
                 .then( () => me.initMicrodraw2());
         },
 
+        /**
+         * @function loadZoomButtons
+         * @desc Initializes all three zoom buttons
+         * @returns {void}
+         */
         loadZoomButtons: function loadZoomButtons() {
             objectivepower = imageMetadata.viewerdata.objectivepower;
             lowZoomLevel = (objectivepower * lowZoom).toFixed(2);
